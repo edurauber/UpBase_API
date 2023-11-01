@@ -17,9 +17,23 @@ namespace UpBase_Api.Entity
         public string Name { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
         public bool IsActive { get; set; }
-
+        public string HashPassword { get; set; }
+        public string Password
+        {
+            get
+            {
+                return HashPassword;
+            }
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    PasswordHasher hashPassword = new PasswordHasher();
+                    HashPassword = hashPassword.HashPassword(value);
+                }
+            }
+        }
         public UserEntity(string name, string username, string email, string password)
         {
             Name = name;
