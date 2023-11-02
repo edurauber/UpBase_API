@@ -36,13 +36,12 @@ namespace UpBase_Api.Entity
                     }
                 }
             }
-            public UserEntity(string name, string username, string email, string password, string salt)
+            public UserEntity(string name, string username, string email, string password)
             {
                 Name = name;
                 Username = username;
                 Email = email;
                 Password = password;
-                Salt = salt;
                 IsActive = true;
             }
             public UserEntity()

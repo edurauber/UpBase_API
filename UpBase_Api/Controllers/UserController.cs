@@ -48,7 +48,7 @@ namespace UpBase_Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(UserInputModel model)
         {
-            var user = new UserEntity(model.Name, model.Username, model.Email, model.Password, model.Salt);
+            var user = new UserEntity(model.Name, model.Username, model.Email, model.Password);
             var parameters = new
             {
                 user.Name,
@@ -68,7 +68,7 @@ namespace UpBase_Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, UserInputModel model)
         {
-            var user = new UserEntity(model.Name, model.Username, model.Email, model.Password, model.Salt);
+            var user = new UserEntity(model.Name, model.Username, model.Email, model.Password);
             var parameters = new
             {
                 id,

@@ -1,5 +1,4 @@
-﻿using Konscious.Security.Cryptography;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
