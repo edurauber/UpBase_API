@@ -19,7 +19,7 @@ namespace UpBase_Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            using (MySqlConnection conn = new MySqlConnection(_connectionString))
+            using (MySqlConnection conn = SQLConnection())
             {
                 string sql = "SELECT * FROM User WHERE IsActive = 1";
                 IEnumerable<UserEntity> users = await conn.QueryAsync<UserEntity>(sql);
@@ -30,7 +30,7 @@ namespace UpBase_Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            using (MySqlConnection conn = new MySqlConnection(_connectionString))
+            using (MySqlConnection conn = SQLConnection())
             {
                 string sql = "SELECT * FROM User WHERE Id = @ID";
                 var parameters = new { id };
@@ -48,7 +48,7 @@ namespace UpBase_Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(UserInputModel model)
         {
-            var user = new UserEntity(model.Name, model.Username, model.Email, model.Password);
+            var user = new UserEntity(model.Name, model.Username, model.Email, model.Password, model.Salt);
             var parameters = new
             {
                 user.Name,
@@ -58,7 +58,7 @@ namespace UpBase_Api.Controllers
                 user.IsActive
             };
 
-            using (MySqlConnection connection = new MySqlConnection(_connectionString))
+            using (MySqlConnection connection = SQLConnection())
             {
                 string sql = "INSERT INTO User VALUES (NULL, @NAME, @USERNAME, @EMAIL, @PASSWORD, @ISACTIVE)";
                 int id = await connection.ExecuteScalarAsync<int>(sql, parameters);
@@ -68,7 +68,7 @@ namespace UpBase_Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, UserInputModel model)
         {
-            var user = new UserEntity(model.Name, model.Username, model.Email, model.Password);
+            var user = new UserEntity(model.Name, model.Username, model.Email, model.Password, model.Salt);
             var parameters = new
             {
                 id,
@@ -77,7 +77,7 @@ namespace UpBase_Api.Controllers
                 user.Password
             };
 
-            using (MySqlConnection connection = new MySqlConnection(_connectionString))
+            using (MySqlConnection connection = SQLConnection())
             {
                 string sql = "UPDATE User SET Name = @NAME, Email = @EMAIL, Password = @PASSWORD WHERE Id = @ID";
                 id = await connection.ExecuteAsync(sql, parameters);
@@ -88,7 +88,7 @@ namespace UpBase_Api.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var parameters = new { id };
-            using (MySqlConnection connection = new MySqlConnection(_connectionString))
+            using (MySqlConnection connection = SQLConnection())
             {
                 string sql = "UPDATE User SET IsActive = 0 WHERE Id = @ID";
                 id = await connection.ExecuteAsync(sql, parameters);

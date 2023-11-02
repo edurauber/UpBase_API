@@ -1,4 +1,5 @@
 ﻿using Konscious.Security.Cryptography;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
@@ -7,24 +8,19 @@ namespace UpBase_Api.Helpers
 {
     public class PasswordHasher
     {
-        public string HashPassword(string password)
+        public static string HashPassword(string senha)
         {
             var salt = new byte[32];
-            using (var rng = new RNGCryptoServiceProvider())
-            {
-                rng.GetBytes(salt);
-            }
-            using (var hasher = new Argon2id(Encoding.UTF8.GetBytes(password)))
-            {
-                hasher.Salt = salt;
-                hasher.DegreeOfParallelism = 8; 
-                hasher.MemorySize = 65536;
+            new RNGCryptoServiceProvider().GetBytes(salt);
 
-                byte[] hashBytes = hasher.GetBytes(32);
-                string hash = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
-                string saltAndHash = Convert.ToBase64String(salt) + ":" + hash;
-                return saltAndHash;
-            }
+            var hash = new Rfc2898DeriveBytes(senha, salt, 10000);
+
+            return Convert.ToBase64String(hash.GetBytes(32));
         }
     }
 }
+
+
+
+
+
